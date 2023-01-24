@@ -380,7 +380,7 @@ bool CheckForValidUserInput(size_t x_CoordinateOfMatrix, size_t y_CoordinateOfMa
 
 bool IsEmptyField(char** puzzle, size_t x_CoordinateOfMatrix, size_t y_CoordinateOfMatrix)
 {
-	return (puzzle[x_CoordinateOfMatrix][y_CoordinateOfMatrix] != '*' && puzzle[x_CoordinateOfMatrix][y_CoordinateOfMatrix] != '-');
+	return (puzzle[x_CoordinateOfMatrix][y_CoordinateOfMatrix] != 'x' && puzzle[x_CoordinateOfMatrix][y_CoordinateOfMatrix] != 'o');
 }
 
 void GetCurrentUsersInput(char** puzzle, int& x_Coordinate, int& y_Coordinate, char& currentSym, size_t sizeOfPuzzle)
