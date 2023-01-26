@@ -64,7 +64,7 @@ void CreateNewAccount(const char* username, const char* password)
 	ofstream output(username);
 	output << password << endl;
 	output.close();
-	cout << "You have successfully created your account. Now you can already start playing from the first level!";
+	cout << "You have successfully created your account. Now you can already start playing from the first level!"<< endl;
 }
 
 // when a person already has got existing account
@@ -83,7 +83,7 @@ void AlreadyExistingAccount(const char* username, const char* password)
 		cout << "Wrong password! Try again!";
 		return;
 	}
-	cout << "You heve succesfully loggedin in your account! Now you can start playing!";
+	cout << "You have succesfully loggedin in your account! Now you can start playing!" << endl;
 	input.close();
 }
 
@@ -178,46 +178,46 @@ void UsersChoiceOfLevel(size_t& level)
 void SelectAndLoadLevel(size_t level, string& matrix, size_t sizeOfMatrix)
 {
 	ifstream currentFileOfUsersChoice;
-	//srand(time(0));
+	srand(time(0));
 	double randomOptionSelector = rand() % 1 + 0;
 	switch (level)
 	{
-	case 1:
-		if (randomOptionSelector == 0)
-		{
-			currentFileOfUsersChoice.open("level_1_v1.txt");
-		}
-		else
-		{
-			currentFileOfUsersChoice.open("level_1_v2.txt");
-		}
-		countOfPossibleMistakesAccordingToTheCurrentLevel = 3;
-		break;
-	case 2:
-		if (randomOptionSelector == 0)
-		{
-			currentFileOfUsersChoice.open("level_2_v1.txt");
-		}
-		else
-		{
-			currentFileOfUsersChoice.open("level_2_v2.txt");
-		}
-		countOfPossibleMistakesAccordingToTheCurrentLevel = 4;
-		break;
-	case 3:
-		if (randomOptionSelector == 0)
-		{
-			currentFileOfUsersChoice.open("level_3_v1.txt");
-		}
-		else
-		{
-			currentFileOfUsersChoice.open("level_3_v2.txt");
-		}
-		countOfPossibleMistakesAccordingToTheCurrentLevel = 5;
-		break;
-	default:
-		cout << "The game supports only 3 levels!";
-		break;
+		case 1:
+			if (randomOptionSelector == 0)
+			{
+				currentFileOfUsersChoice.open("level_1_v1.txt");
+			}
+			else
+			{
+				currentFileOfUsersChoice.open("level_1_v2.txt");
+			}
+			countOfPossibleMistakesAccordingToTheCurrentLevel = 3;
+			break;
+		case 2:
+			if (randomOptionSelector == 0)
+			{
+				currentFileOfUsersChoice.open("level_2_v1.txt");
+			}
+			else
+			{
+				currentFileOfUsersChoice.open("level_2_v2.txt");
+			}
+			countOfPossibleMistakesAccordingToTheCurrentLevel = 4;
+			break;
+		case 3:
+			if (randomOptionSelector == 0)
+			{
+				currentFileOfUsersChoice.open("level_3_v1.txt");
+			}
+			else
+			{
+				currentFileOfUsersChoice.open("level_3_v2.txt");
+			}
+			countOfPossibleMistakesAccordingToTheCurrentLevel = 5;
+			break;
+		default:
+			cout << "The game supports only 3 levels!";
+			break;
 	}
 	// check for error when reading the file
 	if (currentFileOfUsersChoice.is_open() == false)
@@ -234,11 +234,11 @@ void VisualizeTheMatrixCorrespondingToTheOccupiedFieldsOfTheCols(int** matrixAbo
 {
 	for (size_t i = 0; i < maxRows; i++)
 	{
-		for (size_t j = 0; j < maxCols; j++)
+		for (size_t j = 0; j < maxCols; j++) // print spaces before the matrix -> for each current row
 		{
 			cout << "  ";
 		}
-		for (size_t k = 0; k < cols; k++)
+		for (size_t k = 0; k < cols; k++) // print digits for each current row
 		{
 			if (matrixAbovePuzzle[i][k] == 0)
 			{
@@ -253,10 +253,11 @@ void VisualizeTheMatrixCorrespondingToTheOccupiedFieldsOfTheCols(int** matrixAbo
 	}
 }
 
+//initialize the matrix containing the number of filled fields in each row and save the max number of cols in the corresponding variable
 void CountOfConsecutivelyOccupiedFieldsInRows(char** puzzle, int sizeOfPuzzle, int** matrixToTheLeftOfThePuzzle, int& rows, int& maxCols)
 {
-	int cols = 0;
-	size_t counter = 0;
+	int cols = 0; // length of current row
+	size_t counter = 0; // number of consecutive filled fields
 	for (int i = 0; i < sizeOfPuzzle; i++)
 	{
 		for (int j = 0; j < sizeOfPuzzle; j++)
@@ -266,7 +267,7 @@ void CountOfConsecutivelyOccupiedFieldsInRows(char** puzzle, int sizeOfPuzzle, i
 				if (counter != 0)
 				{
 					matrixToTheLeftOfThePuzzle[i][cols] = counter;
-					cols++;
+					cols++; // index of current row for the matrix left to the puzzle
 					counter = 0;
 				}
 			}
@@ -274,26 +275,29 @@ void CountOfConsecutivelyOccupiedFieldsInRows(char** puzzle, int sizeOfPuzzle, i
 			{
 				counter++;
 			}
-			if (j == sizeOfPuzzle - 1 && counter != 0)
+			if (j == sizeOfPuzzle - 1 && counter != 0) //check for the last filled field of the current row
 			{
 				matrixToTheLeftOfThePuzzle[i][cols] = counter;
 				cols++;
 			}
 		}
-		if (maxCols < cols) maxCols = cols;
+		if (maxCols < cols) maxCols = cols; // for finding the max count of cols
 		cols = 0;
 		counter = 0;
 	}
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < rows; i++) // replacing th edefault values in the matrix to the left of the puzzle
 	{
 		for (int j = 0; j < maxCols; j++)
 		{
 			if (matrixToTheLeftOfThePuzzle[i][j] < 0 || matrixToTheLeftOfThePuzzle[i][j] > sizeOfPuzzle)
+			{
 				matrixToTheLeftOfThePuzzle[i][j] = 0;
+			}
 		}
 	}
 }
 
+//analogous to the previous function, but by cols
 void CountOfConsecutivelyOccupiedFieldsInColumns(char** puzzle, int sizeOfPuzzle, int& maxCols,
 	int**& matrixAbovePuzzle, int& rows, int& cols, int& maxRows)
 {
@@ -331,7 +335,9 @@ void CountOfConsecutivelyOccupiedFieldsInColumns(char** puzzle, int sizeOfPuzzle
 		for (int j = 0; j < cols; j++)
 		{
 			if (matrixAbovePuzzle[i][j] < 0 || matrixAbovePuzzle[i][j] > sizeOfPuzzle)
+			{
 				matrixAbovePuzzle[i][j] = 0;
+			}
 		}
 	}
 }
@@ -343,7 +349,7 @@ void VisualizeTheEntireNonogramPuzzle(char** puzzle, size_t sizeOfPuzzle, int** 
 	VisualizeTheMatrixCorrespondingToTheOccupiedFieldsOfTheCols(matrixAbovePuzzle, maxRows, cols, maxCols);
 	for (size_t i = 0; i < sizeOfPuzzle; i++)
 	{
-		for (int j = 0; j < maxCols; j++)
+		for (int j = 0; j < maxCols; j++) // print the matrix left to the puzzle
 		{
 			if (matrixToTheLeftOfThePuzzle[i][j] == 0)
 			{
@@ -354,9 +360,9 @@ void VisualizeTheEntireNonogramPuzzle(char** puzzle, size_t sizeOfPuzzle, int** 
 				cout << matrixToTheLeftOfThePuzzle[i][j] << " ";
 			}
 		}
-		for (size_t j = 0; j < sizeOfPuzzle; j++)
+		for (size_t j = 0; j < sizeOfPuzzle; j++) // print the nonogram puzzle(main matrix)
 		{
-			if ((puzzle[i][j] != 'x') && (puzzle[i][j] != 'o'))
+			if ((puzzle[i][j] != 'x') && (puzzle[i][j] != 'o')) // in case of field is not opened
 			{
 				cout << "(" << " " << ") ";
 			}
@@ -477,7 +483,7 @@ bool isTheHoleNonogramPuzzleSolved(char** puzzle, size_t x_CoordinateOfMatrix, s
 			break;
 	}
 	OpenTheRemainingNonFilledFieldsInEntireNonogramPuzzle(puzzle, x_CoordinateOfMatrix, y_CoordinateOfMatrix, sizeOfPuzzle);
-	for (size_t i = 0; i < sizeOfPuzzle; i++)
+	for (size_t i = 0; i < sizeOfPuzzle; i++) // whether the player guessed all filled fields
 	{
 		for (size_t j = 0; j < sizeOfPuzzle; j++)
 		{
@@ -512,6 +518,57 @@ void artificialDeletionOfTheConsole() {
 	std::cout << "\x1B[2J\x1B[H";
 }
 
+void ContinueWithNextLevel(int level)
+{
+	int newLevel = ++level;
+	string filledFieldsOfMatrixReadFromFile;
+	char** puzzle;
+	size_t sizeOfPuzzle = 0;
+	int rows = 0;
+	int maxRows = 0;
+	int cols = 0;
+	int maxCols = 0;
+
+	InitializeMatrixAccordingToTheSizeAndLevel(level, puzzle, sizeOfPuzzle);
+	SelectAndLoadLevel(level, filledFieldsOfMatrixReadFromFile, sizeOfPuzzle);
+	for (size_t i = 0; i < sizeOfPuzzle; i++)
+	{
+		for (size_t j = 0; j < sizeOfPuzzle; j++)
+		{
+			puzzle[i][j] = filledFieldsOfMatrixReadFromFile[j + i * sizeOfPuzzle];
+		}
+	}
+
+	int x_Coordinate, y_Coordinate;
+	size_t mistakes = 0;
+	char currentUserSymbol;
+	int** arraysWithFilledFieldsInRows = CreateMatrix(sizeOfPuzzle, sizeOfPuzzle); // first initialization of the matrix left to the puzzle
+	int** arraysWithFilledFieldsInCols = CreateMatrix(sizeOfPuzzle, sizeOfPuzzle); // first initialization of the matrix above to the puzzle
+	CountOfConsecutivelyOccupiedFieldsInRows(puzzle, sizeOfPuzzle, arraysWithFilledFieldsInRows, rows, maxCols);
+	CountOfConsecutivelyOccupiedFieldsInColumns(puzzle, sizeOfPuzzle, maxCols, arraysWithFilledFieldsInCols, rows, cols, maxRows);
+
+	VisualizeTheEntireNonogramPuzzle(puzzle, sizeOfPuzzle, arraysWithFilledFieldsInRows, arraysWithFilledFieldsInCols, rows, maxCols, maxRows, cols);
+	while (true)
+	{
+		GetCurrentUsersInput(puzzle, x_Coordinate, y_Coordinate, currentUserSymbol, sizeOfPuzzle);
+		if (isTheHoleNonogramPuzzleSolved(puzzle, x_Coordinate, y_Coordinate, mistakes, currentUserSymbol, sizeOfPuzzle))
+		{
+			bool continueAnswer;
+			if (level == MAX_POSSIBLE_LEVEL_OF_THE_GAME) cout << "Congratulations, you won the game!" << endl;
+			break;
+		}
+		if (mistakes == countOfPossibleMistakesAccordingToTheCurrentLevel)
+		{
+			cout << "Sorry, you lost! But you can try again!";
+			FreeMatrix(puzzle, rows);
+			break;
+		}
+		artificialDeletionOfTheConsole();
+		VisualizeTheEntireNonogramPuzzle(puzzle, sizeOfPuzzle, arraysWithFilledFieldsInRows, arraysWithFilledFieldsInCols, rows, maxCols, maxRows, cols);
+		cout << "Mistakes: " << mistakes << "   ( " << "Maximum number of mistakes: " << countOfPossibleMistakesAccordingToTheCurrentLevel << " )" << endl;
+	}
+}
+
 void PlayNonogramPuzzle()
 {
 	size_t level = 1; //first level by default
@@ -542,8 +599,8 @@ void PlayNonogramPuzzle()
 	int x_Coordinate, y_Coordinate;
 	size_t mistakes = 0;
 	char currentUserSymbol;
-	int** arraysWithFilledFieldsInRows = CreateMatrix(sizeOfPuzzle, sizeOfPuzzle);
-	int** arraysWithFilledFieldsInCols = CreateMatrix(sizeOfPuzzle, sizeOfPuzzle);
+	int** arraysWithFilledFieldsInRows = CreateMatrix(sizeOfPuzzle, sizeOfPuzzle); // first initialization of the matrix left to the puzzle
+	int** arraysWithFilledFieldsInCols = CreateMatrix(sizeOfPuzzle, sizeOfPuzzle); // first initialization of the matrix above to the puzzle
 	CountOfConsecutivelyOccupiedFieldsInRows(puzzle, sizeOfPuzzle, arraysWithFilledFieldsInRows, rows, maxCols);
 	CountOfConsecutivelyOccupiedFieldsInColumns(puzzle, sizeOfPuzzle, maxCols, arraysWithFilledFieldsInCols, rows, cols, maxRows);
 
@@ -553,12 +610,27 @@ void PlayNonogramPuzzle()
 		GetCurrentUsersInput(puzzle, x_Coordinate, y_Coordinate, currentUserSymbol, sizeOfPuzzle);
 		if (isTheHoleNonogramPuzzleSolved(puzzle, x_Coordinate, y_Coordinate, mistakes, currentUserSymbol, sizeOfPuzzle))
 		{
-			cout << "Congratulations, you won the game!";
+			bool continueAnswer;
+			if(level == MAX_POSSIBLE_LEVEL_OF_THE_GAME) cout << "Congratulations, you won the game!"<< endl;
+			else
+			{
+				cout << "Congratulations, you solved this level!" << endl;
+				cout << "Would you like to continue with the next level? (1 - yes OR 0 - no): ";
+				cin >> continueAnswer;
+				if (continueAnswer) ContinueWithNextLevel(level);
+				else cout << "Thank you for playing, we will be waiting for you again!";
+			}
 			break;
 		}
 		if (mistakes == countOfPossibleMistakesAccordingToTheCurrentLevel)
 		{
+			bool againAnswer;
 			cout << "Sorry, you lost! But you can try again!";
+			FreeMatrix(puzzle, rows);
+			cout << "Would you like to try again to solve this level? (1 - yes OR 0 - no): ";
+			cin >> againAnswer;
+			if (againAnswer) ContinueWithNextLevel(--level);
+			else cout << "Thank you for playing, we will be waiting for you again!";
 			break;
 		}
 		artificialDeletionOfTheConsole();
